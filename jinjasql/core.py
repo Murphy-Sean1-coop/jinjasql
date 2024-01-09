@@ -107,13 +107,18 @@ def bind(value, name):
         return _bind_param(_thread_local.bind_params, name, value)
     
 def bind_in_clause(value):
-    values = list(value)
-    results = []
-    for v in values:
-        results.append(_bind_param(_thread_local.bind_params, "inclause", v))
-    
-    clause = ",".join(results)
-    clause = "(" + clause + ")"
+    if isinstance(value,list):
+        values = list(value)
+        results = []
+        for v in values:
+            results.append(_bind_param(_thread_local.bind_params, "inclause", v))
+
+        clause = ",".join(results)
+        clause = "(" + clause + ")"
+    elif value == "*":
+        clause = ""
+    else:
+        raise ValueError(f"value: {value} must be a type: list or value '*'")
     return clause
 
 def _bind_param(already_bound, key, value):
