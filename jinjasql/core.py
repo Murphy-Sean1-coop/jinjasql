@@ -117,6 +117,8 @@ def bind_in_clause(value):
         clause = "(" + clause + ")"
     elif value == "*":
         clause = ""
+    elif value is None:
+        clause = ""
     else:
         raise ValueError(f"value: {value} must be a type: list or value '*'")
     return clause
