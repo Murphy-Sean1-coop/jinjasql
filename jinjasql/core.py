@@ -180,7 +180,7 @@ class JinjaSql(object):
     def __init__(self, env=None, param_style='format', identifier_quote_character='"'):
         self.param_style = param_style
         if identifier_quote_character not in self.VALID_ID_QUOTE_CHARS:
-            raise ValueError("identifier_quote_characters must be one of " + VALID_ID_QUOTE_CHARS)
+            raise ValueError("identifier_quote_characters must be one of " + self.VALID_ID_QUOTE_CHARS)
         self.identifier_quote_character = identifier_quote_character
         self.env = env or Environment()
         self._prepare_environment()
@@ -188,7 +188,7 @@ class JinjaSql(object):
     def _prepare_environment(self):
         self.env.autoescape=True
         self.env.add_extension(SqlExtension)
-        self.env.add_extension('jinja2.ext.autoescape')
+        #self.env.add_extension('jinja2.ext.autoescape') #not needed with jinja2 ^3.1
         self.env.filters["bind"] = bind
         self.env.filters["sqlsafe"] = sql_safe
         self.env.filters["inclause"] = bind_in_clause
