@@ -123,6 +123,25 @@ def bind_in_clause(value):
         raise ValueError(f"value: {value} must be a type: list or value '*'")
     return clause
 
+def bind_in_clause_str(value):
+    if isinstance(value,list):
+        values = list(value)
+        results = []
+        for v in values:
+            results.append(_bind_param(_thread_local.bind_params, "inclause_str", v))
+
+        results = [f"'{v}'" for v in results]
+
+        clause = ",".join(results)
+        clause = "(" + clause + ")"
+    elif value == "*":
+        clause = ""
+    elif value is None:
+        clause = ""
+    else:
+        raise ValueError(f"value: {value} must be a type: list or value '*'")
+    return clause
+
 def _bind_param(already_bound, key, value):
     _thread_local.param_index += 1
     new_key = "%s_%s" % (key, _thread_local.param_index)
@@ -192,6 +211,7 @@ class JinjaSql(object):
         self.env.filters["bind"] = bind
         self.env.filters["sqlsafe"] = sql_safe
         self.env.filters["inclause"] = bind_in_clause
+        self.env.filters["inclause_str"] = bind_in_clause_str
         self.env.filters["identifier"] = build_escape_identifier_filter(self.identifier_quote_character)
 
     def prepare_query(self, source, data):
