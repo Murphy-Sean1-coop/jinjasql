@@ -130,7 +130,7 @@ def bind_in_clause(value):
 
 def bind_in_clause_str(value):
     if isinstance(value, list):
-        value = [f'"{v}"' for v in value]
+        value = [f"'{v}'" for v in value]
         values = list(value)
         results = []
         for v in values:
