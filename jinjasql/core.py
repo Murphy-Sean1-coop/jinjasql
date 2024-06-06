@@ -126,11 +126,10 @@ def bind_in_clause(value):
 def bind_in_clause_str(value):
     if isinstance(value,list):
         values = list(value)
-        values = [f"'{v}'" for v in values]
         results = []
         for v in values:
+            v = f"'{v}"
             results.append(_bind_param(_thread_local.bind_params, "inclause_str", v))
-
 
         clause = ",".join(results)
         clause = "(" + clause + ")"
